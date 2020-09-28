@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
+import com.physicaloid.lib.Physicaloid;
+import com.physicaloid.lib.usb.driver.uart.ReadLisener;
 
 
 import static android.widget.Toast.*;
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     Button b;
     TextView t;
     PyObject python;
+    Physicaloid mPhysicaloid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,40 @@ public class MainActivity extends AppCompatActivity {
         python=py.getModule("Rubics_CFOP");
         Log.d("solve","Ready!");
         b.setVisibility(View.VISIBLE);
+
+        mPhysicaloid=new Physicaloid(this);
+
+        mPhysicaloid.setBaudrate(9600);
+
+        if(mPhysicaloid.open()) { 	// tries to connect to device and if device was connected
+
+            // read listener, When new data is received from Arduino add it to Text view
+            mPhysicaloid.addReadListener(new ReadLisener() {
+                @Override
+                public void onRead(int size) {
+                    byte[] buf = new byte[size];
+                    mPhysicaloid.read(buf, size);
+                    tvAppend(t, Html.fromHtml("<font color=blue>" + new String(buf) + "</fon                     t>")); 		// add data to text viiew
+                }
+            });
+
+        } else {
+            //Error while connecting
+            Toast.makeText(this, "Cannot open", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    Handler mHandler = new Handler();
+    private void tvAppend(TextView tv, CharSequence text) {
+        final TextView ftv = tv;
+        final CharSequence ftext = text;
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                ftv.append(ftext); 	// add text to Text view
+            }
+        });
     }
 
     public void doo(View view){
@@ -49,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
         t.setText(o.toString());
         Log.d("solve",o.toString());
         Toast.makeText(this,o.toString(),LENGTH_SHORT).show();
+        String str= o.toString()+"\r\n";
+        if(str.length()>0) {
+            byte[] buf = str.getBytes();	//convert string to byte array
+            mPhysicaloid.write(buf, buf.length);	//write data to arduino
+        }
     }
 
 }
