@@ -3,6 +3,7 @@ package com.putin.thecuber;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -19,14 +20,20 @@ import com.physicaloid.lib.Physicaloid;
 import com.physicaloid.lib.usb.driver.uart.ReadLisener;
 
 
+import java.util.Arrays;
+
+import me.aflak.arduino.Arduino;
+import me.aflak.arduino.ArduinoListener;
+
 import static android.widget.Toast.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ArduinoListener {
 
     Button b;
     TextView t;
     PyObject python;
     Physicaloid mPhysicaloid;
+    Arduino arduino;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,48 +43,59 @@ public class MainActivity extends AppCompatActivity {
         if(!Python.isStarted())
             Python.start(new AndroidPlatform(this));
 
-        b=(Button)findViewById(R.id.button);
+        b=findViewById(R.id.button);
         b.setVisibility(View.INVISIBLE);
-        t=(TextView)findViewById(R.id.textView);
+        t=findViewById(R.id.textView);
 
         Python py=Python.getInstance();
         python=py.getModule("Rubics_CFOP");
         Log.d("solve","Ready!");
         b.setVisibility(View.VISIBLE);
 
-        mPhysicaloid=new Physicaloid(this);
 
-        mPhysicaloid.setBaudrate(9600);
-
-        if(mPhysicaloid.open()) { 	// tries to connect to device and if device was connected
-
-            // read listener, When new data is received from Arduino add it to Text view
-            mPhysicaloid.addReadListener(new ReadLisener() {
-                @Override
-                public void onRead(int size) {
-                    byte[] buf = new byte[size];
-                    mPhysicaloid.read(buf, size);
-                    tvAppend(t, Html.fromHtml("<font color=blue>" + new String(buf) + "</fon                     t>")); 		// add data to text viiew
-                }
-            });
-
-        } else {
-            //Error while connecting
-            Toast.makeText(this, "Cannot open", Toast.LENGTH_LONG).show();
-        }
-
+        arduino=new Arduino(this);
+        Button b1=findViewById(R.id.b1);
     }
 
-    Handler mHandler = new Handler();
-    private void tvAppend(TextView tv, CharSequence text) {
-        final TextView ftv = tv;
-        final CharSequence ftext = text;
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                ftv.append(ftext); 	// add text to Text view
-            }
-        });
+    @Override
+    protected void onStart() {
+        super.onStart();
+        arduino.setArduinoListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        arduino.unsetArduinoListener();
+        arduino.close();
+    }
+
+    @Override
+    public void onArduinoAttached(UsbDevice device) {
+        Toast.makeText(this, "Arduino attached", Toast.LENGTH_SHORT).show();
+        arduino.open(device);
+    }
+
+    @Override
+    public void onArduinoDetached() {
+        Toast.makeText(this,"Arduino detached",LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onArduinoMessage(byte[] bytes) {
+        Toast.makeText(this,new String(bytes),LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onArduinoOpened() {
+        String str = "Arduino opened...";
+        arduino.send(str.getBytes());
+        Toast.makeText(this,"Arduino opened.",LENGTH_SHORT).show();
+    }
+
+    public void se(View view){
+        arduino.send("1".getBytes());
+        Toast.makeText(this,"sending"+ Arrays.toString("1".getBytes()),LENGTH_SHORT).show();
     }
 
     public void doo(View view){
@@ -88,11 +106,6 @@ public class MainActivity extends AppCompatActivity {
         t.setText(o.toString());
         Log.d("solve",o.toString());
         Toast.makeText(this,o.toString(),LENGTH_SHORT).show();
-        String str= o.toString()+"\r\n";
-        if(str.length()>0) {
-            byte[] buf = str.getBytes();	//convert string to byte array
-            mPhysicaloid.write(buf, buf.length);	//write data to arduino
-        }
+        arduino.send(o.toString().getBytes());
     }
-
 }
