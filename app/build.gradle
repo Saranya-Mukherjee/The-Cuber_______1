@@ -8,16 +8,19 @@ android {
     defaultConfig {
         applicationId "com.putin.thecuber"
 
-        python{
-            pip{
+        python {
+            pip {
                 install "rubik-solver"
+                install "numpy"
+                install "matplotlib"
+                install "opencv-python"
             }
         }
 
-        sourceSets{
-            main{
-                python{
-                    srcDirs=["src/main/python"]
+        sourceSets {
+            main {
+                python {
+                    srcDirs = ["src/main/python"]
                 }
             }
         }
@@ -32,7 +35,7 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
 
-        python{
+        python {
             buildPython "C:/Python38/python.exe"
         }
 
@@ -42,6 +45,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jni {
+                srcDirs 'src/main/jni', 'src/main/jniLibs/'
+            }
         }
     }
 
@@ -56,6 +66,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation files('libs/FNM9MXQIJUCPKBD.jar')
     implementation 'me.aflak.libraries:arduino:1.3'
+    implementation project(path: ':openCVLibrary3410')
 }
 allprojects {
     repositories {

@@ -3,6 +3,7 @@ package com.putin.thecuber;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements ArduinoListener {
     Button b;
     TextView t;
     PyObject python;
-    Physicaloid mPhysicaloid;
     Arduino arduino;
 
     @Override
@@ -99,13 +99,8 @@ public class MainActivity extends AppCompatActivity implements ArduinoListener {
     }
 
     public void doo(View view){
-        t.setText((String)"Computing");
-        Log.d("solve","Computing...");
-        Toast.makeText(this,"Computing...",LENGTH_SHORT).show();
-        PyObject o=python.callAttr("ran_k","1");
-        t.setText(o.toString());
-        Log.d("solve",o.toString());
-        Toast.makeText(this,o.toString(),LENGTH_SHORT).show();
-        arduino.send(o.toString().getBytes());
+        // ToDo: opens the scanning activity
+        Intent intent = new Intent(this, Solve_Activity.class);
+        startActivity(intent);
     }
 }

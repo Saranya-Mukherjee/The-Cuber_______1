@@ -1,2 +1,3 @@
 rootProject.name='The Cuber'
 include ':app'
+include ':openCVLibrary3410'
