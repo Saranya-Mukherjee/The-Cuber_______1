@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
     PyObject python;
     JavaCameraView cam;
     Button bu;
+    CheckBox c;
     String s="";
     Mat a,b=new Mat(),g=new Mat(),r=new Mat(),o=new Mat(),y=new Mat(),w=new Mat();
     BaseLoaderCallback baseLoaderCallback=new BaseLoaderCallback(Solve_Activity.this){
@@ -68,12 +70,15 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
         cam.setVisibility(SurfaceView.VISIBLE);
         cam.setCvCameraViewListener(this);
         bu=findViewById(R.id.button2);
+        c=findViewById(R.id.side);
 
         Python py=Python.getInstance();
         python=py.getModule("Rubics_CFOP");
 
 
     }
+
+
 
     public void sh(View view){
         Toast.makeText(this,bu.getText().toString(), Toast.LENGTH_SHORT).show();
