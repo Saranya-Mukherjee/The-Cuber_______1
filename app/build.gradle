@@ -7,6 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.putin.thecuber"
+        minSdkVersion 18
 
         python {
             pip {
@@ -54,6 +55,10 @@ android {
             }
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
 }
 
@@ -67,10 +72,11 @@ dependencies {
     implementation files('libs/FNM9MXQIJUCPKBD.jar')
     implementation 'me.aflak.libraries:arduino:1.3'
     implementation project(path: ':openCVLibrary3410')
+    implementation "com.polidea.rxandroidble2:rxandroidble:1.11.1"
 }
 allprojects {
     repositories {
-        jcenter()
+        maven { url "https://jitpack.io" }
         maven { url "https://jitpack.io" }
     }
 }

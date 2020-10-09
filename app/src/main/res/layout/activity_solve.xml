@@ -28,12 +28,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/camera">
 
-        <CheckBox
-            android:id="@+id/side"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/res"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="3.5"
-            android:text="SIDE" />
+            android:layout_weight="0.01"
+            android:onClick="reset"
+            android:text="RESET" />
 
         <Button
             android:id="@+id/button2"

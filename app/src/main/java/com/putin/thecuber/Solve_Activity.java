@@ -32,8 +32,11 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
     PyObject python;
     JavaCameraView cam;
     Button bu;
-    CheckBox c;
+    Button sid;
     String s="";
+    public static String[] colours={"","","","","",""};
+    String[] side={"top","bot","front","left","right","back"};
+    int current =0;
     Mat a,b=new Mat(),g=new Mat(),r=new Mat(),o=new Mat(),y=new Mat(),w=new Mat();
     BaseLoaderCallback baseLoaderCallback=new BaseLoaderCallback(Solve_Activity.this){
         @Override
@@ -70,7 +73,7 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
         cam.setVisibility(SurfaceView.VISIBLE);
         cam.setCvCameraViewListener(this);
         bu=findViewById(R.id.button2);
-        c=findViewById(R.id.side);
+        sid=findViewById(R.id.res);
 
         Python py=Python.getInstance();
         python=py.getModule("Rubics_CFOP");
@@ -78,10 +81,20 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
 
     }
 
+   public void sh(View view){
+        if(current>5) {
+            Toast.makeText(this, "You need to reset.All sides are filled.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+       colours[current]=bu.getText().toString();
+       Toast.makeText(this,side[current++]+bu.getText().toString(), Toast.LENGTH_LONG).show();
+    }
 
-
-    public void sh(View view){
-        Toast.makeText(this,bu.getText().toString(), Toast.LENGTH_SHORT).show();
+    public void reset(View view){
+        for(int i=0;i<6;i++){
+            colours[i]="";
+        }
+        current =0;
     }
 
     public void sol(View view){
@@ -92,7 +105,6 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
     @Override
     public void onCameraViewStarted(int width, int height) {
         a=new Mat(height,width, CvType.CV_8UC4);
-
     }
 
     @Override
@@ -111,18 +123,20 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
         a=inputFrame.rgba();
         Mat h=new Mat();
         Imgproc.cvtColor(a,h,Imgproc.COLOR_RGB2HSV);
-        Core.inRange(h,new Scalar(95,220,170), new Scalar(103,255,255),b);
+        Core.inRange(h,new Scalar(92,200,170), new Scalar(107,255,255),b);
         Core.inRange(h,new Scalar(44,175,150), new Scalar(73,255,255),g);
-        Core.inRange(h,new Scalar(12,180,216), new Scalar(21,255,255),o);
-        Core.inRange(h,new Scalar(0,175,200), new Scalar(10,255,255),y);
-        Core.inRange(h,new Scalar(170,170,0), new Scalar(255,255,255),r);
+        Core.inRange(h,new Scalar(12,180,216), new Scalar(22,255,255),o);
+        Core.inRange(h,new Scalar(0,170,190), new Scalar(11,255,255),y);
+        Core.inRange(h,new Scalar(165,170,0), new Scalar(255,255,255),r);
         Core.add(r,y,r);
         Core.inRange(h,new Scalar(27,160,170), new Scalar(34,255,255),y);
+        Core.inRange(h,new Scalar(0,12,217), new Scalar(255,50,255),w);
 //        Core.copyTo(a, t);
         Core.add(b,g,a);
         Core.add(a,o,a);
         Core.add(a,y,a);
         Core.add(a,r,a);
+//        Core.add(a,w,a);
 
         double u1=0.0,u2=0.0,u3=0.0,u4=0.0;
         int flag=0;
@@ -192,7 +206,7 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
             x+=(size/3);
         }
         Log.d("uniq","================");
-        bu.setText(s);
+        bu.setText(side[current]+": "+s);
         h.release();
         System.gc();
         s="";

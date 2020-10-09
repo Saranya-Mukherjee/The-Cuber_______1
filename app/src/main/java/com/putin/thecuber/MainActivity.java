@@ -3,6 +3,11 @@ package com.putin.thecuber;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
@@ -17,23 +22,27 @@ import android.widget.Toast;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
-import com.physicaloid.lib.Physicaloid;
-import com.physicaloid.lib.usb.driver.uart.ReadLisener;
 
 
-import java.util.Arrays;
+import java.util.UUID;
+
 
 import me.aflak.arduino.Arduino;
 import me.aflak.arduino.ArduinoListener;
 
 import static android.widget.Toast.*;
 
-public class MainActivity extends AppCompatActivity implements ArduinoListener {
+public class MainActivity extends AppCompatActivity implements ArduinoListener{
 
     Button b;
     TextView t;
     PyObject python;
     Arduino arduino;
+    String macAddress = "3C:A3:08:91:AF:D8";
+    private static final UUID UUID_DEVICE = UUID.fromString("00002a00-0000-1000-8000-00805f9b34fb");
+    private static final UUID UUID_SERVICE = UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb");
+    private static final UUID UUID_CHARACTERISTIC = UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +103,10 @@ public class MainActivity extends AppCompatActivity implements ArduinoListener {
     }
 
     public void se(View view){
-        arduino.send("1".getBytes());
-        Toast.makeText(this,"sending"+ Arrays.toString("1".getBytes()),LENGTH_SHORT).show();
+        arduino.send("HI".getBytes());
+        Toast.makeText(this,"sending:  "+"HI",LENGTH_SHORT).show();
     }
+
 
     public void doo(View view){
         // ToDo: opens the scanning activity

@@ -52,17 +52,17 @@ def rot(i):
     i=cv2.rotate(i,cv2.ROTATE_90_CLOCKWISE)
     return i
 
-# img=cv2.imread('s2.jpg')
-# im=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-# hs=cv2.cvtColor(im,cv2.COLOR_RGB2HSV)
-#
-# _,res=green(hs,im)
-# _,r1=red(hs,im)
-# _,r2=blue(hs,im)
-# _,r3=org(hs,im)
-# _,r5=yellow(hs,im)
-#
-# res=res+r1+r2+r3+r5
-#
-# plt.imshow(res)
-# plt.show()
+img=cv2.imread('s2.jpg')
+im=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+hs=cv2.cvtColor(im,cv2.COLOR_RGB2HSV)
+
+_,res=green(hs,im)
+_,r1=red(hs,im)
+_,r2=blue(hs,im)
+_,r3=org(hs,im)
+_,r5=yellow(hs,im)
+
+res=res+r1+r2+r3+r5
+
+plt.imshow(res)
+plt.show()
