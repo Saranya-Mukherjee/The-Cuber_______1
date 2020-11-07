@@ -21,12 +21,20 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="411dp"
-        android:layout_height="62dp"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/camera">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.01"
+            android:text="TextView"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/res"
@@ -43,6 +51,7 @@
             android:layout_weight="1"
             android:onClick="sh"
             android:text="back" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

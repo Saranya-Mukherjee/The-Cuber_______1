@@ -39,28 +39,15 @@ public class MainActivity extends AppCompatActivity implements ArduinoListener{
     PyObject python;
     Arduino arduino;
     String macAddress = "3C:A3:08:91:AF:D8";
-    private static final UUID UUID_DEVICE = UUID.fromString("00002a00-0000-1000-8000-00805f9b34fb");
-    private static final UUID UUID_SERVICE = UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb");
-    private static final UUID UUID_CHARACTERISTIC = UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(!Python.isStarted())
-            Python.start(new AndroidPlatform(this));
-
         b=findViewById(R.id.button);
-        b.setVisibility(View.INVISIBLE);
-        t=findViewById(R.id.textView);
-
-        Python py=Python.getInstance();
-        python=py.getModule("Rubics_CFOP");
-        Log.d("solve","Ready!");
         b.setVisibility(View.VISIBLE);
-
+        t=findViewById(R.id.textView);
 
         arduino=new Arduino(this);
         Button b1=findViewById(R.id.b1);

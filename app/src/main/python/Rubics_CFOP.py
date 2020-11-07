@@ -1064,3 +1064,23 @@ def ran_k(b):
     for a in m_koc:
         s+=a+" "
     return str(s)
+
+def sol_k(b):
+    import Kociemba as k
+    b1=""
+    for a in b:
+        if a != " ":
+            b1+=a
+
+    s=""
+    # for a in range(4):
+    #     if front[1][1]=='r':
+    #         break
+    #     turn_right()
+    #     s+="Y' "
+    cub=b1
+    m_koc=k.kocem(cub)
+    m_koc=optimize(con(m_koc))
+    for a in m_koc:
+        s+=a+" "
+    return str(s)
