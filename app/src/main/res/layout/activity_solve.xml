@@ -37,14 +37,6 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/res"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.01"
-            android:onClick="reset"
-            android:text="RESET" />
-
-        <Button
             android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

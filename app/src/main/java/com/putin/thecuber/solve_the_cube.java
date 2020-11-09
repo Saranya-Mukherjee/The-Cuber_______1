@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,7 +36,6 @@ public class solve_the_cube extends AppCompatActivity {
         t1=findViewById(R.id.scram);
         t1.setText(scramble);
 
-        b=findViewById(R.id.do_it);
         t2=findViewById(R.id.solve);
 
         if (! Python.isStarted()) {
@@ -45,11 +47,35 @@ public class solve_the_cube extends AppCompatActivity {
 
     }
 
-    public void sol(View view){
+    public void sol(){
         String scr=t1.getText().toString();
         PyObject o=python.callAttr("sol_k",scr);
 //        Toast.makeText(this,o.toString(),LENGTH_SHORT).show();
         t2.setText(o.toString());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.final_head, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.solve:
+                sol();
+                return true;
+            case R.id.back:
+                Intent intent = new Intent(this, Solve_Activity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
 }

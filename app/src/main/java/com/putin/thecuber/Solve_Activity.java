@@ -101,6 +101,9 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
                 intent.putExtra(EXTRA_MESSAGE,loaded);
                 startActivity(intent);
                 return true;
+            case R.id.reset:
+                resett();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -116,7 +119,6 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
         cam.setVisibility(SurfaceView.VISIBLE);
         cam.setCvCameraViewListener(this);
         bu=findViewById(R.id.button2);
-        sid=findViewById(R.id.res);
         state=findViewById(R.id.textView2);
 
 
@@ -158,7 +160,7 @@ public class Solve_Activity extends AppCompatActivity implements CameraBridgeVie
        Toast.makeText(this,loaded, Toast.LENGTH_LONG).show();
     }
 
-    public void reset(View view){
+    public void resett(){
         for(int i=0;i<6;i++){
             colours[i]="";
         }

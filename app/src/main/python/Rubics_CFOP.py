@@ -966,7 +966,6 @@ def con(set):
             new.append(m)
     return new
 
-
 def form():
     cube=''
     for a in top:
@@ -1078,8 +1077,7 @@ def sol_k(b):
     #         break
     #     turn_right()
     #     s+="Y' "
-    cub=b1
-    m_koc=k.kocem(cub)
+    m_koc=k.kocem(b1)
     m_koc=optimize(con(m_koc))
     for a in m_koc:
         s+=a+" "
